@@ -11,7 +11,7 @@ services:
     networks:
       - collection-server
     volumes:
-      - resources:/srv
+      - ./resources:/srv
 
 networks:
   collection-server:
