@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  collection-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.compose
+    environment:
+      - COLLECTION_SERVER_RESOURCE_PATH=/srv
+    image: dungeon-studio/collection-server:latest
+    networks:
+      - collection-server
+    volumes:
+      - resources:/srv
+
+networks:
+  collection-server:
