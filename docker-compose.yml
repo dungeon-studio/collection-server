@@ -10,6 +10,8 @@ services:
     image: dungeon-studio/collection-server:latest
     networks:
       - collection-server
+    ports:
+      - "80"
     volumes:
       - ./resources:/srv
 
