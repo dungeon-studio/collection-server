@@ -1,0 +1,39 @@
+steps:
+  - name: 'haskell:8.0'
+    args: [ 'cabal', 'update' ]
+    id: 'cabal-update'
+    volumes:
+      - name: 'cabal-config'
+        path: '/builder/home/.cabal'
+  - name: 'haskell:8.0'
+    args: [ 'cabal', 'install', '-j', '--only-dependencies' ]
+    id: 'cabal-dependencies'
+    waitFor: [ 'cabal-update' ]
+    volumes:
+      - name: 'cabal-config'
+        path: '/builder/home/.cabal'
+  - name: 'haskell:8.0'
+    args: [ 'cabal', 'build', '-j', '--ghc-options=-static -optc-static -optl-static -optl-pthread' ]
+    id: 'cabal-build'
+    waitFor: [ 'cabal-dependencies' ]
+    volumes:
+      - name: 'cabal-config'
+        path: '/builder/home/.cabal'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-f', 'Dockerfile.scratch', '-t', 'gcr.io/$PROJECT_ID/collection-server', '.' ]
+    id: 'collection-server'
+    waitFor: [ 'cabal-build' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'tag', 'gcr.io/$PROJECT_ID/collection-server', 'gcr.io/$PROJECT_ID/collection-server:$BRANCH_NAME' ]
+    waitFor: [ 'collection-server' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'tag', 'gcr.io/$PROJECT_ID/collection-server', 'gcr.io/$PROJECT_ID/collection-server:$COMMIT_SHA' ]
+    waitFor: [ 'collection-server' ]
+
+images:
+  - 'gcr.io/$PROJECT_ID/collection-server'
+  - 'gcr.io/$PROJECT_ID/collection-server:$BRANCH_NAME'
+  - 'gcr.io/$PROJECT_ID/collection-server:$COMMIT_SHA'
+
+timeout: 30m
