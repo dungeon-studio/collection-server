@@ -87,7 +87,7 @@ spec =
                  fromPath "resources/invalid" (toURI "/invalid") `shouldThrow` doesNotParse "resources/invalid/item.yaml"
 
                it "should parse a valid file" $
-                 fromPath "resources/items/item.yaml" (toURI "/items/item") `shouldReturn` collection (toURI "/items") [item (toURI "/items/item") Nothing]
+                 fromPath "resources/items/item" (toURI "/items/item") `shouldReturn` collection (toURI "/items") [item (toURI "/items/item") Nothing]
 
                it "should parse a valid directory" $
                  fromPath "resources/items" (toURI "/items") `shouldReturn` collection (toURI "/items") [item (toURI "/items/item") Nothing]

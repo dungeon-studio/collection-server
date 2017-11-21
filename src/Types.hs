@@ -33,7 +33,7 @@ import Data.Typeable (Typeable)
 import Data.Yaml (decodeFileEither, FromJSON)
 import Network.URI (pathSegments, URI, uriPath)
 import System.Directory (doesDirectoryExist, doesFileExist, listDirectory)
-import System.FilePath ((</>), takeBaseName)
+import System.FilePath ((</>), (-<.>), takeBaseName)
 
 -- * Exceptions
 
@@ -50,7 +50,7 @@ instance Exception DirectoryCollectionException
 -- * FilePath Based Collection Constructors
 
 fromPath :: (MonadCatch m, MonadIO m) => FilePath -> URI -> m Collection
-fromPath p u = cDirectory p u `catch` (\ (e :: DirectoryCollectionException) -> cFile p u `onException` throwM e)
+fromPath p u = cDirectory p u `catch` (\ (e :: DirectoryCollectionException) -> cFile (p -<.> "yaml") u `onException` throwM e)
 
 cFile :: (MonadIO m, MonadThrow m) => FilePath -> URI -> m Collection
 cFile p u =
