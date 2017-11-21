@@ -28,13 +28,12 @@ import Control.Monad.Extra (unlessM)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.CollectionJSON
 import Data.List (isPrefixOf, intercalate)
-import Data.Maybe (fromJust)
 import Data.Text (pack)
 import Data.Typeable (Typeable)
 import Data.Yaml (decodeFileEither, FromJSON)
-import Network.URI (parseRelativeReference, pathSegments, relativeTo, URI, uriPath)
+import Network.URI (pathSegments, URI, uriPath)
 import System.Directory (doesDirectoryExist, doesFileExist, listDirectory)
-import System.FilePath ((</>), (<.>), takeBaseName)
+import System.FilePath ((</>), takeBaseName)
 
 -- * Exceptions
 
@@ -70,7 +69,9 @@ cDirectory :: (MonadCatch m, MonadIO m) => FilePath -> URI -> m Collection
 cDirectory p u =
   do unlessM (liftIO $ doesDirectoryExist p) $ throwM $ DoesNotExist p
 
-     xs <- mapM (fromPath' u) =<< liftIO (ls p)
+     ls <- fmap (map (p </>) . filter (not . isPrefixOf ".")) $ liftIO $ listDirectory p
+
+     xs <- mapM fromPath'' ls
 
      return Collection
        { cVersion  = "1.0"
@@ -81,7 +82,8 @@ cDirectory p u =
        , cTemplate = Nothing -- TODO Allow collection items to be added?
        , cError    = Nothing
        }
-  where ls = fmap (map (p </>) . filter (not . isPrefixOf ".")) . listDirectory
+
+  where fromPath'' d = fromPath' (u { uriPath = uriPath u ++ "/" ++ takeBaseName d }) d
 
 -- FilePath Based Item Constructors
 
@@ -92,16 +94,15 @@ fromPath' u p = iFile u p `catch` h
 
 iFile :: (MonadIO m, MonadThrow m) => URI -> FilePath -> m Item
 iFile u p =
-  do unlessM (liftIO $ doesFileExist p') $ throwM $ DoesNotExist p'
-     i <- parse p'
+  do unlessM (liftIO $ doesFileExist p) $ throwM $ DoesNotExist p
+     i <- parse p
      return $ i { iHref = u }
-  where p' = p <.> "yaml"
 
 iDirectory :: (MonadIO m, MonadThrow m) => URI -> FilePath -> m Item
 iDirectory u p =
   do unlessM (liftIO $ doesDirectoryExist p) $ throwM $ DoesNotExist p
      return Item
-       { iHref  = fromJust (parseRelativeReference n) `relativeTo` u
+       { iHref  = u
        , iData  = [ Datum "name" (Just $ pack n) (Just $ pack n)
                   ]
        , iLinks = []
@@ -112,3 +113,5 @@ iDirectory u p =
 
 parse :: (FromJSON a, MonadIO m, MonadThrow m) => FilePath -> m a
 parse p = either (throwM . DoesNotParse p . show) return =<< liftIO (decodeFileEither p)
+
+

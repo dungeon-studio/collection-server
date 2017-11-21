@@ -33,24 +33,24 @@ spec =
 
           describe "iFile" $
             do it "should throw DoesNotExist" $
-                 iFile (toURI "/invalid/non-existent") "resources/invalid/non-existent" `shouldThrow` doesNotExist "resources/invalid/non-existent.yaml"
+                 iFile (toURI "/invalid/non-existent") "resources/invalid/non-existent.yaml" `shouldThrow` doesNotExist "resources/invalid/non-existent.yaml"
 
                it "should throw DoesNotParse" $
-                 iFile (toURI "/invalid/item") "resources/invalid/item" `shouldThrow` doesNotParse "resources/invalid/item.yaml"
+                 iFile (toURI "/invalid/item") "resources/invalid/item.yaml" `shouldThrow` doesNotParse "resources/invalid/item.yaml"
 
                it "should return a valid item" $
-                 iFile (toURI "/mixed/item") "resources/mixed/item" `shouldReturn` item (toURI "/mixed/item") Nothing
+                 iFile (toURI "/mixed/item") "resources/mixed/item.yaml" `shouldReturn` item (toURI "/mixed/item") Nothing
 
           describe "fromPath'" $
             do it "should throw DoesNotExist" $
                  fromPath' (toURI "/invalid/non-existent") "resources/invalid/non-existent" `shouldThrow` doesNotExist "resources/invalid/non-existent"
 
                it "should throw DoesNotParse" $
-                 fromPath' (toURI "/invalid/item") "resources/invalid/item" `shouldThrow` doesNotParse "resources/invalid/item.yaml"
+                 fromPath' (toURI "/invalid/item") "resources/invalid/item.yaml" `shouldThrow` doesNotParse "resources/invalid/item.yaml"
 
                it "should parse a valid file" $
-                 do fromPath' (toURI "/mixed/item") "resources/mixed/item" `shouldReturn` item (toURI "/mixed/item") Nothing
-                    fromPath' (toURI "/items/item") "resources/items/item" `shouldReturn` item (toURI "/items/item") Nothing
+                 do fromPath' (toURI "/mixed/item") "resources/mixed/item.yaml" `shouldReturn` item (toURI "/mixed/item") Nothing
+                    fromPath' (toURI "/items/item") "resources/items/item.yaml" `shouldReturn` item (toURI "/items/item") Nothing
 
                it "should parse a valid directory" $
                  fromPath' (toURI "/mixed/subcollection") "resources/mixed/subcollection" `shouldReturn` item (toURI "/mixed/subcollection") (Just "subcollection")
@@ -71,13 +71,13 @@ spec =
 
           describe "cFile" $
             do it "should throw DoesNotExist" $
-                 cFile "resources/invalid/non-existent" (toURI "/invalid/non-existent") `shouldThrow` doesNotExist "resources/invalid/non-existent.yaml"
+                 cFile "resources/invalid/non-existent.yaml" (toURI "/invalid/non-existent") `shouldThrow` doesNotExist "resources/invalid/non-existent.yaml"
 
                it "should throw DoesNotParse" $
-                 cFile "resources/invalid/item" (toURI "/invalid/item") `shouldThrow` doesNotParse "resources/invalid/item.yaml"
+                 cFile "resources/invalid/item.yaml" (toURI "/invalid/item") `shouldThrow` doesNotParse "resources/invalid/item.yaml"
 
                it "should parse a valid file" $
-                 cFile "resources/items/item" (toURI "/items/item") `shouldReturn` collection (toURI "/items") [item (toURI "/items/item") Nothing]
+                 cFile "resources/items/item.yaml" (toURI "/items/item") `shouldReturn` collection (toURI "/items") [item (toURI "/items/item") Nothing]
 
           describe "fromPath" $
             do it "should throw DoesNotExist" $
@@ -87,7 +87,7 @@ spec =
                  fromPath "resources/invalid" (toURI "/invalid") `shouldThrow` doesNotParse "resources/invalid/item.yaml"
 
                it "should parse a valid file" $
-                 fromPath "resources/items/item" (toURI "/items/item") `shouldReturn` collection (toURI "/items") [item (toURI "/items/item") Nothing]
+                 fromPath "resources/items/item.yaml" (toURI "/items/item") `shouldReturn` collection (toURI "/items") [item (toURI "/items/item") Nothing]
 
                it "should parse a valid directory" $
                  fromPath "resources/items" (toURI "/items") `shouldReturn` collection (toURI "/items") [item (toURI "/items/item") Nothing]
