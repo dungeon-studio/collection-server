@@ -14,46 +14,39 @@ module API
   , server
   ) where
 
-import Control.Monad.IO.Class (liftIO)
+import Control.Monad.Catch (catch)
 import Control.Monad (unless)
+import Data.CollectionJSON (Collection)
 import Data.List (isPrefixOf)
-import Data.Maybe (fromJust, isJust)
-import Network.URI.Missing (append)
-import Network.URI (parseRelativeReference, URI)
-import Servant.API.ContentTypes.CollectionJSON (CollectionJSON)
+import Data.Maybe (fromJust)
+import Network.URI (parseRelativeReference, relativeTo, URI)
 import Servant ((:>), CaptureAll, Get, Handler, Header, Server, throwError)
-import System.FilePath ((</>), joinPath, splitPath, takeBaseName, takeDirectory)
+import System.FilePath ((</>), joinPath, takeBaseName)
 
 import Errors
+import External.Servant.API.ContentTypes.CollectionJSON (CollectionJSON)
+import Internal.Data.CollectionJSON ()
+import Internal.System.FilePath (collapse, takeDirectoryIf)
 import Types
 
 -- | "Servant" API for statis @application/vnd.collection+json@ resources.
-type API = CaptureAll "path" FilePath :> Header "Host" URI :> Get '[CollectionJSON] DirectoryCollection
+type API = CaptureAll "path" FilePath :> Header "Host" URI :> Get '[CollectionJSON] Collection
 
 -- | "Servant" 'Server' for static @application/vnd.collection+json@ resources.
 server :: FilePath -> Server API
 server = handler
 
-handler :: FilePath -> [FilePath] -> Maybe URI -> Handler DirectoryCollection
+handler :: FilePath -> [FilePath] -> Maybe URI -> Handler Collection
 handler r ss h =
-  do unless (r `isPrefixOf` p') $ throwError $ e404 p -- Check for directory escapes.
+  do unless (r `isPrefixOf` p') $ throwError $ collection404 p u -- Check for directory escapes.
 
-     c <- liftIO $ fromPath p'
-     case c of
-       DoesNotExist     -> throwError $ e404 p'
-       (DoesNotParse m) -> throwError $ e500 m
-       _                -> return $ c `withURI` u
+     fromPath p' u `catch` throwServantErr u
 
-  where p  = foldl1 (</>) ss
-        p' = collapse $ r </> if takeBaseName p == "index" then takeDirectory p else p
+  where p  = joinPath ss
+        p' = takeDirectoryIf ((== "index") . takeBaseName) $ collapse $ r </> p
 
-        u  = if isJust h then fromJust h `append` p else fromJust (parseRelativeReference p) -- TODO Feeld flaky
+        u  = fromJust $ relativeTo <$> parseRelativeReference p <*> h
 
-        e404 = flip collection404 u
-        e500 = flip collection500 u
-
-collapse :: FilePath -> FilePath
-collapse = joinPath . reverse . dots . reverse . splitPath
-  where dots ("/..":ss) = tail ss
-        dots ("/.":ss)  = ss
-        dots ss         = ss
+throwServantErr :: URI -> DirectoryCollectionException -> Handler Collection
+throwServantErr u (DoesNotExist p)   = throwError $ collection404 p u
+throwServantErr u (DoesNotParse _ m) = throwError $ collection500 m u

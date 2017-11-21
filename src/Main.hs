@@ -8,8 +8,7 @@ License     : MIT
 -}
 module Main (main) where
 
-import Control.Monad.Extra (notM)
-import Control.Monad (when)
+import Control.Monad.Extra (notM, whenM)
 import Network.Wai.Handler.Warp (defaultSettings, runSettings, setLogger, setPort)
 import Network.Wai.Logger (withStdoutLogger)
 import Servant (Application, Proxy (Proxy), serve)
@@ -18,22 +17,23 @@ import System.Envy (decodeEnv)
 
 import API
 import Environment
+import External.Network.URI.HttpApiData ()
 
 -- | Set up and run a "Network.Wai.Handler.Warp" server with our "Servant"
 --   'API'.
 main :: IO ()
-main = withStdoutLogger $ \ l -> do
-  e <- decodeEnv :: IO (Either String Environment)
-  flip (either fail) e $ \ env -> do
-    print env
+main = withStdoutLogger $ \ l ->
+  do e <- either fail return =<< decodeEnv
+     print e
 
-    let w = setPort (port env) $
-            setLogger l
-            defaultSettings
+     let p = resourcePath e
+     whenM (notM $ doesDirectoryExist p) $ fail $ "path, " ++ p ++ ", does not exist"
 
-    notM (doesDirectoryExist $ resourcePath env) >>= flip when (fail $ resourcePath env ++ " does not exist")
+     let w = setPort (port e) $
+             setLogger l
+             defaultSettings
 
-    runSettings w $ application (resourcePath env)
+     runSettings w $ application p
 
 application :: FilePath -> Application
 application = serve (Proxy :: Proxy API) . server

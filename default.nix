@@ -1,11 +1,26 @@
-{ nixpkgs ? import <nixpkgs> { }
-, compiler ? "default"
+{ mkDerivation, aeson, base, collection-json, directory, envy
+, exceptions, extra, filepath, hspec, http-api-data, http-media
+, http-types, network-uri, QuickCheck, quickcheck-instances
+, servant, servant-server, stdenv, test-invariant, text, wai-logger
+, warp, yaml
 }:
-let
-  inherit (nixpkgs) pkgs;
-
-  haskellPackages = if compiler == "default"
-                       then pkgs.haskellPackages
-                       else pkgs.haskell.packages.${compiler};
-in
-  haskellPackages.callPackage ./collection-server.nix { }
+mkDerivation {
+  pname = "collection-server";
+  version = "0.1.0.0";
+  src = ./.;
+  isLibrary = false;
+  isExecutable = true;
+  executableHaskellDepends = [
+    aeson base collection-json directory envy exceptions extra filepath
+    http-api-data http-media http-types network-uri servant
+    servant-server text wai-logger warp yaml
+  ];
+  testHaskellDepends = [
+    aeson base collection-json filepath hspec http-api-data http-media
+    network-uri QuickCheck quickcheck-instances servant servant-server
+    test-invariant text
+  ];
+  homepage = "https://github.com/alunduil/collection-server";
+  description = "Static Resource Server for application/vnd.collection+json";
+  license = stdenv.lib.licenses.mit;
+}
