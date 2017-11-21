@@ -16,9 +16,10 @@ mkDerivation {
     servant-server text wai-logger warp yaml
   ];
   testHaskellDepends = [
-    aeson base collection-json filepath hspec http-api-data http-media
-    network-uri QuickCheck quickcheck-instances servant servant-server
-    test-invariant text
+    aeson base collection-json directory exceptions extra filepath
+    hspec http-api-data http-media network-uri QuickCheck
+    quickcheck-instances servant servant-server test-invariant text
+    yaml
   ];
   homepage = "https://github.com/alunduil/collection-server";
   description = "Static Resource Server for application/vnd.collection+json";

@@ -19,8 +19,8 @@ import Control.Monad (unless)
 import Data.CollectionJSON (Collection)
 import Data.List (isPrefixOf)
 import Data.Maybe (fromJust)
-import Network.URI (parseRelativeReference, relativeTo, URI)
-import Servant ((:>), CaptureAll, Get, Handler, Header, Server, throwError)
+import Network.URI (parseRelativeReference, URI)
+import Servant ((:>), CaptureAll, Get, Handler, Server, throwError)
 import System.FilePath ((</>), joinPath, takeBaseName)
 
 import Errors
@@ -30,14 +30,14 @@ import Internal.System.FilePath (collapse, takeDirectoryIf)
 import Types
 
 -- | "Servant" API for statis @application/vnd.collection+json@ resources.
-type API = CaptureAll "path" FilePath :> Header "Host" URI :> Get '[CollectionJSON] Collection
+type API = CaptureAll "path" FilePath :> Get '[CollectionJSON] Collection
 
 -- | "Servant" 'Server' for static @application/vnd.collection+json@ resources.
 server :: FilePath -> Server API
 server = handler
 
-handler :: FilePath -> [FilePath] -> Maybe URI -> Handler Collection
-handler r ss h =
+handler :: FilePath -> [FilePath] -> Handler Collection
+handler r ss =
   do unless (r `isPrefixOf` p') $ throwError $ collection404 p u -- Check for directory escapes.
 
      fromPath p' u `catch` throwServantErr u
@@ -45,7 +45,7 @@ handler r ss h =
   where p  = joinPath ss
         p' = takeDirectoryIf ((== "index") . takeBaseName) $ collapse $ r </> p
 
-        u  = fromJust $ relativeTo <$> parseRelativeReference p <*> h
+        u  = fromJust $ parseRelativeReference p
 
 throwServantErr :: URI -> DirectoryCollectionException -> Handler Collection
 throwServantErr u (DoesNotExist p)   = throwError $ collection404 p u
