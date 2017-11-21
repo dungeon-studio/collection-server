@@ -49,4 +49,4 @@ handler r ss =
 
 throwServantErr :: URI -> DirectoryCollectionException -> Handler Collection
 throwServantErr u (DoesNotExist p)   = throwError $ collection404 p u
-throwServantErr u (DoesNotParse _ m) = throwError $ collection500 m u
+throwServantErr u (DoesNotParse p m) = throwError $ collection500 (p ++ ":\n" ++ m) u
