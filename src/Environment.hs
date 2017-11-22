@@ -33,5 +33,5 @@ instance Show Environment where
 
 instance FromEnv Environment where
   fromEnv = Environment
-    <$> envMaybe "COLLECTION_SERVER_PORT"           .!= 80
+    <$> envMaybe "COLLECTION_SERVER_PORT"          .!= 80
     <*> env      "COLLECTION_SERVER_RESOURCE_PATH"

@@ -3,7 +3,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 {-|
-Module      : Servant.API.ContentTypes.CollectionJSON
+Module      : External.Servant.API.ContentTypes.CollectionJSON
 Description : Servant ContentType for @application/vnd.collection+json@
 Copyright   : (c) Alex Brandt, 2017
 License     : MIT
@@ -12,9 +12,8 @@ Servant ContentType for @application/vnd.collection+json@---a content type
 created by M. Amundsen and documented at
 <http://amundsen.com/media-types/collection/>.
 -}
-module Servant.API.ContentTypes.CollectionJSON where
+module External.Servant.API.ContentTypes.CollectionJSON where
 
-import Control.Arrow (right)
 import Data.Aeson (eitherDecode, encode)
 import Data.CollectionJSON (FromCollection (fromCollection), ToCollection (toCollection))
 import Network.HTTP.Media ((//))
@@ -25,7 +24,7 @@ data CollectionJSON
 
 -- | @application/vnd.collection+json@
 instance Accept CollectionJSON where
-  contentType _ = "application" // "vnd.collection+json"
+  contentType _ = "application" // "vnd.collection+json" -- TODO profile parameter
 
 -- | Convert a 'ToCollection' instance to a 'ByteString'.
 instance ToCollection a => MimeRender CollectionJSON a where
@@ -33,4 +32,4 @@ instance ToCollection a => MimeRender CollectionJSON a where
 
 -- | Convert a 'ByteString' to a 'FromCollection' instance.
 instance FromCollection a => MimeUnrender CollectionJSON a where
-  mimeUnrender _ = right fromCollection . eitherDecode
+  mimeUnrender _ = fmap fromCollection . eitherDecode
