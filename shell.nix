@@ -1,4 +1,1 @@
-{ nixpkgs ? import <nixpkgs> { }
-, compiler ? "default"
-}:
-(import ./default.nix { inherit nixpkgs compiler; }).env
+(import ./collection-server.nix).collection-server.env
