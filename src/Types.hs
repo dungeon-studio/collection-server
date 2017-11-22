@@ -113,5 +113,3 @@ iDirectory u p =
 
 parse :: (FromJSON a, MonadIO m, MonadThrow m) => FilePath -> m a
 parse p = either (throwM . DoesNotParse p . show) return =<< liftIO (decodeFileEither p)
-
-
