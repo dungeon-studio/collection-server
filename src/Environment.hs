@@ -16,6 +16,7 @@ module Environment
     )
   ) where
 
+import Control.Applicative ((<|>))
 import System.Envy ((.!=), env, envMaybe, FromEnv (fromEnv))
 
 -- | Environment for collection-server.
@@ -33,5 +34,5 @@ instance Show Environment where
 
 instance FromEnv Environment where
   fromEnv = Environment
-    <$> envMaybe "COLLECTION_SERVER_PORT"          .!= 80
+    <$> ((<|>) <$> envMaybe "COLLECTION_SERVER_PORT" <*> envMaybe "PORT") .!= 80
     <*> env      "COLLECTION_SERVER_RESOURCE_PATH"
