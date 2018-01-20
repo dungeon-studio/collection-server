@@ -13,7 +13,7 @@ steps:
             '-f', 'Dockerfile', '.' ]
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build'
+    args: [ 'build',
             '--cache-from', 'gcr.io/$PROJECT_ID/builder-collection-server',
             '--cache-from', 'gcr.io/$PROJECT_ID/collection-server',
             '-t', 'gcr.io/$PROJECT_ID/collection-server',
