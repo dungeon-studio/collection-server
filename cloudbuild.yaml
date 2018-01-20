@@ -6,7 +6,7 @@ steps:
     args: [ 'pull', 'gcr.io/$PROJECT_ID/collection-server' ]
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build'
+    args: [ 'build',
             '--cache-from', 'gcr.io/$PROJECT_ID/builder-collection-server',
             '-t', 'gcr.io/$PROJECT_ID/builder-collection-server',
             '--target', 'builder',
