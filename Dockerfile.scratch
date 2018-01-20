@@ -1,6 +1,0 @@
-FROM scratch
-MAINTAINER Alex Brandt <alunduil@alunduil.com>
-
-COPY dist/build/collection-server/collection-server /
-
-ENTRYPOINT [ "/collection-server" ]

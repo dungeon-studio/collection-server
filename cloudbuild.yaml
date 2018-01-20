@@ -1,37 +1,28 @@
 steps:
-  - name: 'haskell:8.0'
-    args: [ 'cabal', 'update' ]
-    id: 'cabal-update'
-    volumes:
-      - name: 'cabal-config'
-        path: '/builder/home/.cabal'
-  - name: 'haskell:8.0'
-    args: [ 'cabal', 'install', '-j', '--only-dependencies' ]
-    id: 'cabal-dependencies'
-    waitFor: [ 'cabal-update' ]
-    volumes:
-      - name: 'cabal-config'
-        path: '/builder/home/.cabal'
-  - name: 'haskell:8.0'
-    args: [ 'cabal', 'build', '-j', '--ghc-options=-static -optc-static -optl-static -optl-pthread' ]
-    id: 'cabal-build'
-    waitFor: [ 'cabal-dependencies' ]
-    volumes:
-      - name: 'cabal-config'
-        path: '/builder/home/.cabal'
+  #- name: 'gcr.io/cloud-builders/docker'
+  #  args: [ 'pull', 'gcr.io/$PROJECT_ID/builder-collection-server' ]
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-f', 'Dockerfile.scratch', '-t', 'gcr.io/$PROJECT_ID/collection-server', '.' ]
-    id: 'collection-server'
-    waitFor: [ 'cabal-build' ]
+    args: [ 'pull', 'gcr.io/$PROJECT_ID/collection-server' ]
+
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'tag', 'gcr.io/$PROJECT_ID/collection-server', 'gcr.io/$PROJECT_ID/collection-server:$BRANCH_NAME' ]
-    waitFor: [ 'collection-server' ]
+    args: [ 'build'
+            '--cache-from', 'gcr.io/$PROJECT_ID/builder-collection-server',
+            '-t', 'gcr.io/$PROJECT_ID/builder-collection-server',
+            '--target', 'builder',
+            '-f', 'Dockerfile', '.' ]
+
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'tag', 'gcr.io/$PROJECT_ID/collection-server', 'gcr.io/$PROJECT_ID/collection-server:$COMMIT_SHA' ]
-    waitFor: [ 'collection-server' ]
+    args: [ 'build'
+            '--cache-from', 'gcr.io/$PROJECT_ID/builder-collection-server',
+            '--cache-from', 'gcr.io/$PROJECT_ID/collection-server',
+            '-t', 'gcr.io/$PROJECT_ID/collection-server',
+            '-t', 'gcr.io/$PROJECT_ID/collection-server:$BRANCH_NAME',
+            '-t', 'gcr.io/$PROJECT_ID/collection-server:$COMMIT_SHA',
+            '-f', 'Dockerfile', '.' ]
 
 images:
+  - 'gcr.io/$PROJECT_ID/builder-collection-server'
   - 'gcr.io/$PROJECT_ID/collection-server'
   - 'gcr.io/$PROJECT_ID/collection-server:$BRANCH_NAME'
   - 'gcr.io/$PROJECT_ID/collection-server:$COMMIT_SHA'
