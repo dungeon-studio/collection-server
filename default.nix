@@ -2,18 +2,18 @@
 , exceptions, extra, filepath, hspec, http-api-data, http-media
 , http-types, network-arbitrary, network-uri, QuickCheck
 , quickcheck-instances, servant, servant-server, stdenv
-, test-invariant, text, wai-logger, warp, yaml
+, test-invariant, text, wai-cors, wai-extra, warp, yaml
 }:
 mkDerivation {
   pname = "collection-server";
-  version = "0.1.2.0";
+  version = "0.1.3.0";
   src = ./.;
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
     aeson base collection-json directory envy exceptions extra filepath
     http-api-data http-media http-types network-uri servant
-    servant-server text wai-logger warp yaml
+    servant-server text wai-cors wai-extra warp yaml
   ];
   testHaskellDepends = [
     aeson base collection-json directory exceptions extra filepath
