@@ -23,6 +23,15 @@ extra-source-files:
   , COPYRIGHT
   , LICENSE
   , README.md
+  , resources/empty/.keep
+  , resources/invalid/item.yaml
+  , resources/invalid/.keep
+  , resources/items/item.yaml
+  , resources/items/.keep
+  , resources/.keep
+  , resources/mixed/item.yaml
+  , resources/mixed/.keep
+  , resources/mixed/subcollection/.keep
   , Setup.hs
 
 source-repository head
