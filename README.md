@@ -14,7 +14,7 @@ Given a directory of `application/collection+json` items encoded as yaml
 directly:
 
 ```bash
-docker run --publish=80 --env=COLLECTION_SERVER_RESOURCE_PATH=/resource --volume=${RESOURCES}:/srv dungeonstudio/collection-server
+docker run --publish=80 --env=COLLECTION_SERVER_RESOURCE_PATH=/resource --volume=${RESOURCES}:/srv quay.io/dungeon.studio/collection-server
 ```
 
 ## Base Docker Image
@@ -27,7 +27,7 @@ Two things are needed when building a derivative Dockerfile:
 Example Dockerfile:
 
 ```Dockerfile
-FROM dungeonstudio/collection-server
+FROM quay.io/dungeon.studio/collection-server
 
 ENV COLLECTION_SERVER_RESOURCE_PATH /resources
 
