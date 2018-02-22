@@ -27,7 +27,7 @@ import Control.Monad.Catch (catch, Exception, MonadCatch, MonadThrow, onExceptio
 import Control.Monad.Extra (unlessM)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.CollectionJSON
-import Data.List (isPrefixOf, intercalate)
+import Data.List (isPrefixOf, intercalate, sort)
 import Data.Text (pack)
 import Data.Typeable (Typeable)
 import Data.Yaml (decodeFileEither, FromJSON)
@@ -69,7 +69,7 @@ cDirectory :: (MonadCatch m, MonadIO m) => FilePath -> URI -> m Collection
 cDirectory p u =
   do unlessM (liftIO $ doesDirectoryExist p) $ throwM $ DoesNotExist p
 
-     ls <- fmap (map (p </>) . filter (not . isPrefixOf ".")) $ liftIO $ listDirectory p
+     ls <- fmap (sort . map (p </>) . filter (not . isPrefixOf ".")) $ liftIO $ listDirectory p
 
      xs <- mapM fromPath'' ls
 
