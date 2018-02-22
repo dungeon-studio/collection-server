@@ -67,7 +67,7 @@ spec =
                  cDirectory "resources/items" (toURI "/items") `shouldReturn` collection (toURI "/items") [item (toURI "/items/item") Nothing]
 
                it "should parse a mixed directory" $
-                 cDirectory "resources/mixed" (toURI "/mixed") `shouldReturn` collection (toURI "/mixed") [item (toURI "/mixed/subcollection") (Just "subcollection"), item (toURI "/mixed/item") Nothing]
+                 cDirectory "resources/mixed" (toURI "/mixed") `shouldReturn` collection (toURI "/mixed") [item (toURI "/mixed/item") Nothing, item (toURI "/mixed/subcollection") (Just "subcollection")]
 
           describe "cFile" $
             do it "should throw DoesNotExist" $
@@ -93,7 +93,7 @@ spec =
                  fromPath "resources/items" (toURI "/items") `shouldReturn` collection (toURI "/items") [item (toURI "/items/item") Nothing]
 
                it "should parse a mixed directory" $
-                 fromPath "resources/mixed" (toURI "/mixed") `shouldReturn` collection (toURI "/mixed") [item (toURI "/mixed/subcollection") (Just "subcollection"), item (toURI "/mixed/item") Nothing]
+                 fromPath "resources/mixed" (toURI "/mixed") `shouldReturn` collection (toURI "/mixed") [item (toURI "/mixed/item") Nothing, item (toURI "/mixed/subcollection") (Just "subcollection")]
 
 collection :: URI -> [Item] -> Collection
 collection u xs = Collection
