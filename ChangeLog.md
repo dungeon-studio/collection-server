@@ -1,5 +1,11 @@
 # Revision history for collection-server
 
+## 1.0.0.0  -- 2018-02-25
+
+* update Dockerfile for open sourcing
+* update README for open sourcing
+* fix travis configuration and failures
+
 ## 0.1.3.0  -- 2018-02-09
 
 * add CORS support

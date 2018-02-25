@@ -1,5 +1,5 @@
 name:                collection-server
-version:             0.1.3.0
+version:             1.0.0.0
 synopsis:            Static Resource Server for application/vnd.collection+json
 
 description:         
@@ -127,7 +127,7 @@ test-suite collection-server-tests
     , http-media           == 0.6.*
     , network-arbitrary    == 0.3.*
     , network-uri          == 2.6.*
-    , QuickCheck           == 2.9.*
+    , QuickCheck           >= 2.9 && < 2.11
     , quickcheck-instances == 0.3.*
     , servant              == 0.11.*
     , servant-server       == 0.11.*
