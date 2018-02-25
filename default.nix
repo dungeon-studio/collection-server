@@ -6,7 +6,7 @@
 }:
 mkDerivation {
   pname = "collection-server";
-  version = "0.1.3.0";
+  version = "1.0.0.0";
   src = ./.;
   isLibrary = false;
   isExecutable = true;
