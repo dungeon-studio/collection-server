@@ -1,7 +1,7 @@
 { mkDerivation, aeson, base, collection-json, directory, envy
-, exceptions, extra, filepath, hspec, http-api-data, http-media
-, http-types, network-arbitrary, network-uri, QuickCheck
-, quickcheck-instances, servant, servant-server, stdenv
+, exceptions, extra, filepath, hspec, hspec-discover, http-api-data
+, http-media, http-types, network-arbitrary, network-uri
+, QuickCheck, quickcheck-instances, servant, servant-server, stdenv
 , test-invariant, text, wai-cors, wai-extra, warp, yaml
 }:
 mkDerivation {
@@ -21,6 +21,7 @@ mkDerivation {
     QuickCheck quickcheck-instances servant servant-server
     test-invariant text yaml
   ];
+  testToolDepends = [ hspec-discover ];
   homepage = "https://github.com/alunduil/collection-server";
   description = "Static Resource Server for application/vnd.collection+json";
   license = stdenv.lib.licenses.mit;
