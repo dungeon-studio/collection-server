@@ -5,6 +5,10 @@ Static Resource Server for application/vnd.collection+json
 Static resource server that serves application/vnd.collection+json resources
 from a directory of yaml files.
 
+I am providing code in the repository to you under an open source license.
+Because this is my personal repository, the license you receive to my code is
+from me and not my employer (Facebook).
+
 # Getting Started
 
 ## Running

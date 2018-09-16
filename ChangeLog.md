@@ -1,5 +1,9 @@
 # Revision history for collection-server
 
+## 1.0.1.0  -- 2018-09-14
+
+* update yaml
+
 ## 1.0.0.0  -- 2018-02-25
 
 * update Dockerfile for open sourcing
