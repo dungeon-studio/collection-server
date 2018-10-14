@@ -133,7 +133,7 @@ test-suite collection-server-tests
     , servant-server       == 0.11.*
     , test-invariant       == 0.4.*
     , text                 == 1.2.*
-    , yaml                 == 0.8.*
+    , yaml                 >= 0.8 && < 0.11
 
   other-extensions:
       DataKinds
