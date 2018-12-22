@@ -2,15 +2,21 @@ let
   config = {
     packageOverrides = pkgs: rec {
       haskellPackages = pkgs.haskellPackages.override {
-        overrides = haskellPackagesNew: haskellPackageOld: rec {
+        overrides = haskellPackagesNew: haskellPackageOld:
+          let
+            toPackage = file: _: {
+              name = builtins.replaceStrings [ ".nix" ] [ "" ] file;
 
-          collection-server =
-            haskellPackagesNew.callPackage ./default.nix { };
+              value = haskellPackagesNew.callPackage (./. + "/nix/${file}") { };
+            };
 
-          network-arbitrary =
-            haskellPackagesNew.callPackage ./network-arbitrary.nix { };
+            packages = pkgs.lib.mapAttrs' toPackage (builtins.readDir ./nix);
 
-        };
+          in
+            packages // {
+              collection-server =
+                haskellPackagesNew.callPackage ./default.nix { };
+            };
       };
     };
   };
