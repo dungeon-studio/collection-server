@@ -7,6 +7,9 @@ let
           collection-server =
             haskellPackagesNew.callPackage ./default.nix { };
 
+          network-arbitrary =
+            haskellPackagesNew.callPackage ./network-arbitrary.nix { };
+
         };
       };
     };
