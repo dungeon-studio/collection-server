@@ -72,7 +72,7 @@ executable collection-server
     , http-types      >= 0.9 && < 0.13
     , network-uri     == 2.6.*
     , servant         >= 0.11 && < 0.16
-    , servant-server  == 0.11.*
+    , servant-server  >= 0.11 && < 0.16
     , text            == 1.2.*
     , wai-cors        == 0.2.*
     , wai-extra       == 3.0.*
@@ -130,7 +130,7 @@ test-suite collection-server-tests
     , QuickCheck           >= 2.9 && < 2.13
     , quickcheck-instances == 0.3.*
     , servant              >= 0.11 && < 0.16
-    , servant-server       == 0.11.*
+    , servant-server       >= 0.11 && < 0.16
     , test-invariant       == 0.4.*
     , text                 == 1.2.*
     , yaml                 >= 0.8 && < 0.12
