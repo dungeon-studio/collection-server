@@ -3,8 +3,8 @@
 }:
 mkDerivation {
   pname = "network-uri-json";
-  version = "0.3.0.0";
-  sha256 = "4728d90b0686310f3cb91796438b0b64b7ced38efdc34cd6066915f9ed141c97";
+  version = "0.2.0.0";
+  sha256 = "39dc79718af3c39acdaeb7cea22bc06b80a38f2b2eb5396b0c70d599adbdcac6";
   libraryHaskellDepends = [ aeson base network-uri text ];
   testHaskellDepends = [
     aeson base hspec network-arbitrary network-uri test-invariant text
