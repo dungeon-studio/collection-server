@@ -1,20 +1,20 @@
-{ mkDerivation, aeson, base, bytestring, fetchgit, hspec
-, network-uri, QuickCheck, quickcheck-instances, stdenv
-, test-invariant, text
+{ mkDerivation, aeson, base, bytestring, hspec, hspec-discover
+, network-arbitrary, network-uri, network-uri-json, QuickCheck
+, quickcheck-instances, stdenv, test-invariant, text
 }:
 mkDerivation {
   pname = "collection-json";
-  version = "1.1.0.1";
-  src = fetchgit {
-    url = "https://github.com/alunduil/collection-json.hs";
-    sha256 = "00jfc1mrglsk7ngjd3h13kkwa1acch0rq9q9z1z1m67nq5q6aykw";
-    rev = "e611e5cb6fe471412412be502a252504fbd3ce25";
-  };
-  libraryHaskellDepends = [ aeson base network-uri text ];
-  testHaskellDepends = [
-    aeson base bytestring hspec network-uri QuickCheck
-    quickcheck-instances test-invariant text
+  version = "1.2.0.0";
+  sha256 = "24cf386c7eb17e51cb9a042b4fb3bb3aee30a28e953915aa6b3f0fccd2ff8be9";
+  libraryHaskellDepends = [
+    aeson base network-uri network-uri-json text
   ];
+  testHaskellDepends = [
+    aeson base bytestring hspec network-arbitrary network-uri
+    network-uri-json QuickCheck quickcheck-instances test-invariant
+    text
+  ];
+  testToolDepends = [ hspec-discover ];
   homepage = "https://github.com/alunduil/collection-json.hs";
   description = "Collection+JSON—Hypermedia Type Tools";
   license = stdenv.lib.licenses.mit;
