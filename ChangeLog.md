@@ -1,5 +1,17 @@
 # Revision history for collection-server
 
+## 1.1.0.0  -- 2019-01-02
+
+* Increase lower bound on GHC.
+* Update warp, servant-server, exceptions, collection-json, servant,
+  http-api-data, network-arbitrary, envy, hspec, yaml, QuickCheck, http-media,
+  aeson, hspec-discover, base, hspec, extra, http-types, yaml.
+* Add pin for network-uri-json.
+* Update collection-json pinning.
+* Update travis configuration.
+* Switch to dynamic pinning with nix directory.
+* Update network-arbitrary pin.
+
 ## 1.0.1.0  -- 2018-09-14
 
 * update yaml
