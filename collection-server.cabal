@@ -16,7 +16,7 @@ copyright:           (c) 2017 Alex Brandt
 category:            Web
 build-type:          Simple
 cabal-version:       >= 1.10
-tested-with:         GHC >= 8.0.2 && < 9
+tested-with:         GHC >= 8.0.2 && < 8.2.1 || > 8.2.1 && < 9
 
 extra-source-files:
     ChangeLog.md
