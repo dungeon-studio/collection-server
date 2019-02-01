@@ -1,5 +1,11 @@
 # Revision history for collection-server
 
+## 1.2.0.0  -- 2019-01-31
+
+* Remove GHC 8.2.1 from testing.
+* Update hspec and hspec-discover.
+* Update collection-json.
+
 ## 1.1.0.0  -- 2019-01-02
 
 * Increase lower bound on GHC.
