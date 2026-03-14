@@ -1,4 +1,4 @@
-FROM alpine:3.7 as builder
+FROM alpine:3.23 as builder
 MAINTAINER Alex Brandt <alunduil@alunduil.com>
 
 RUN apk add --no-cache musl-dev zlib-dev
