@@ -59,7 +59,7 @@ executable collection-server
     , Types
 
   build-depends:
-      aeson           >= 1.1 && < 1.5
+      aeson >=1.1 && <2.3
     , base >=4.9 && <4.23
     , collection-json >= 1.1 && < 1.4
     , directory       == 1.3.*
@@ -115,7 +115,7 @@ test-suite collection-server-tests
       hspec-discover:hspec-discover >= 2.4 && < 2.8
 
   build-depends:
-      aeson                >= 1.1 && < 1.5
+      aeson >=1.1 && <2.3
     , base >=4.9 && <4.23
     , collection-json      >= 1.1 && < 1.4
     , directory            == 1.3.*
